@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from src.config import settings
 
 
@@ -7,6 +8,15 @@ def init_app():
 
     from src.routers.auth import auth_router
 
+    origins = ["https://ramazanix.tech", "https://www.ramazanix.tech"]
     server.include_router(auth_router)
+
+    server.add_middleware(
+        CORSMiddleware,
+        allow_origins=origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
     return server
