@@ -68,5 +68,5 @@ async def auth_callback(request: Request):
 
     # Возврат JWT токена в качестве ответа
     response = RedirectResponse(url=f'{settings.FRONTEND_URL}')
-    response.set_cookie('accessToken', access_token, secure=True, samesite='none')
+    response.set_cookie('accessToken', access_token, secure=True, samesite='none', domain=settings.FRONTEND_URL)
     return response
