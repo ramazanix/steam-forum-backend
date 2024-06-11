@@ -5,6 +5,7 @@ from fastapi.responses import RedirectResponse
 from src.utils import get_user_info
 from src.config import settings
 from urllib import parse
+
 auth_router = APIRouter(prefix='/auth', tags=['Auth'])
 
 # Конфигурация Steam OpenID Connect
@@ -67,6 +68,8 @@ async def auth_callback(request: Request):
     access_token = create_access_token(user_info)
 
     # Возврат JWT токена в качестве ответа
-    response = RedirectResponse(url=f'{settings.FRONTEND_URL}')
-    response.set_cookie('accessToken', access_token, secure=True, samesite='none', domain='localhost:3000')
+    headers = {'Access-Control-Allow-Credentials': 'true', 'Access-Control-Allow-Origin': '*',
+               'Access-Control-Allow-Headers': '*'}
+    response = RedirectResponse(url=f'{settings.FRONTEND_URL}', headers=headers)
+    response.set_cookie('accessToken', access_token, secure=True, samesite='none')
     return response
