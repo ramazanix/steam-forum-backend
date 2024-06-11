@@ -13,7 +13,7 @@ STEAM_API_KEY = settings.STEAM_API_KEY
 REDIRECT_URI = f'{settings.BACKEND_URL}/auth/callback'
 
 
-@auth_router.get("/auth/login")
+@auth_router.get("/login")
 async def login():
     """
     Обработчик для перенаправления пользователя на страницу аутентификации Steam.
@@ -29,7 +29,7 @@ async def login():
     return RedirectResponse(url=f'{STEAM_OPENID_URL}?{parse.urlencode(params)}')
 
 
-@auth_router.get('/auth/callback')
+@auth_router.get('/callback')
 async def auth_callback(request: Request):
     """
     Обработчик для обработки ответа от Steam после аутентификации.
