@@ -3,10 +3,9 @@ import requests
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import RedirectResponse
 from urllib import parse
-
 from rest.security import create_access_token
 
-app = FastAPI()
+
 
 # Конфигурация Steam OpenID Connect
 STEAM_OPENID_URL = 'https://steamcommunity.com/openid/login'
