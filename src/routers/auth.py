@@ -1,19 +1,19 @@
-import os
 import requests
-from fastapi import FastAPI, Request, HTTPException
+from src.security import create_access_token
+from fastapi import APIRouter, Request, HTTPException
 from fastapi.responses import RedirectResponse
+from src.utils import get_user_info
+from src.config import settings
 from urllib import parse
-from rest.security import create_access_token
-
-
+auth_router = APIRouter(prefix='/auth', tags=['Auth'])
 
 # Конфигурация Steam OpenID Connect
 STEAM_OPENID_URL = 'https://steamcommunity.com/openid/login'
-STEAM_API_KEY = os.getenv('STEAM_API_KEY')
-REDIRECT_URI = f'{os.getenv("BACKEND_URL")}/auth/callback'
+STEAM_API_KEY = settings.STEAM_API_KEY
+REDIRECT_URI = f'{settings.BACKEND_URL}/auth/callback'
 
 
-@app.get("/auth/login")
+@auth_router.get("/auth/login")
 async def login():
     """
     Обработчик для перенаправления пользователя на страницу аутентификации Steam.
@@ -29,7 +29,7 @@ async def login():
     return RedirectResponse(url=f'{STEAM_OPENID_URL}?{parse.urlencode(params)}')
 
 
-@app.get('/auth/callback')
+@auth_router.get('/auth/callback')
 async def auth_callback(request: Request):
     """
     Обработчик для обработки ответа от Steam после аутентификации.
@@ -68,13 +68,3 @@ async def auth_callback(request: Request):
 
     # Возврат JWT токена в качестве ответа
     return {'access_token': access_token}
-
-
-def get_user_info(user_id):
-    """
-    Функция для получения информации о пользователе с помощью Steam API.
-    """
-    url = f"https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key={STEAM_API_KEY}&steamids={user_id}"
-    response = requests.get(url)
-
-    return response.json()['response']['players'][0]
