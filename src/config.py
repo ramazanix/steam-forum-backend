@@ -4,6 +4,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     STEAM_API_KEY: str
     BACKEND_URL: str
+    FRONTEND_URL: str
     SECRET_KEY: str
     ALGORITHM: str
     ACCESS_EXPIRES: int
