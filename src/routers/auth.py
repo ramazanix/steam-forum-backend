@@ -68,7 +68,6 @@ async def auth_callback(request: Request):
     access_token = create_access_token(user_info)
 
     # Возврат JWT токена в качестве ответа
-    response = RedirectResponse(url=settings.FRONTEND_URL)
-    response.set_cookie('accessToken', access_token, secure=True, samesite='none', httponly=True,
-                        domain='.ramazanix.tech')
+    response = RedirectResponse(url=f'{settings.FRONTEND_AUTH_CALLBACK_URL}/?accessToken={access_token}')
     return response
+    
