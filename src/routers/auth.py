@@ -70,4 +70,3 @@ async def auth_callback(request: Request):
     # Возврат JWT токена в качестве ответа
     response = RedirectResponse(url=f'{settings.FRONTEND_AUTH_CALLBACK_URL}/?accessToken={access_token}')
     return response
-    

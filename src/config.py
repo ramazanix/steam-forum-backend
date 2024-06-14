@@ -5,6 +5,7 @@ class Settings(BaseSettings):
     STEAM_API_KEY: str
     BACKEND_URL: str
     FRONTEND_URL: str
+    FRONTEND_AUTH_CALLBACK_URL: str
     SECRET_KEY: str
     ALGORITHM: str
     ACCESS_EXPIRES: int
