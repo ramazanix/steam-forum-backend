@@ -1,15 +1,20 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from src.config import settings
 
 
 def init_app():
     server = FastAPI(title="Steam Forum")
 
     from src.routers.auth import auth_router
+    from src.routers.user import users_router
 
-    origins = ["https://ramazanix.tech", "https://www.ramazanix.tech"]
+    origins = [
+        "https://ramazanix.tech",
+        "https://www.ramazanix.tech",
+    ]
+
     server.include_router(auth_router)
+    server.include_router(users_router)
 
     server.add_middleware(
         CORSMiddleware,

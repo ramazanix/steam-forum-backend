@@ -8,7 +8,7 @@ from src.schemas.user import (
     UserInventoryItem,
 )
 from src.enums import SteamCurrencies, SteamAppIds
-
+from src.cache import cache_manager
 
 async def get_user_info(
     user_id,
@@ -29,6 +29,13 @@ async def get_item_price(
     currency: SteamCurrencies,
     session: ClientSession,
 ):
+    cache = cache_manager.get_cache()
+
+    print(await cache.get(market_hash_name, namespace='price'))
+    if await cache.exists(market_hash_name, 'price'):
+        print('cached')
+        return await cache.get(market_hash_name, namespace='price')
+
     async with session.get(
         f"https://steamcommunity.com/market/priceoverview/"
         f"?appid={app.value}&currency={currency.value}"
@@ -39,7 +46,10 @@ async def get_item_price(
 
         item_price_response = await resp.json()
 
-    return InventoryItemPriceInfo(**item_price_response)
+    res = InventoryItemPriceInfo(**item_price_response)
+    await cache.set(market_hash_name, res, namespace='price')
+
+    return res
 
 
 async def parse_user_inventory(
