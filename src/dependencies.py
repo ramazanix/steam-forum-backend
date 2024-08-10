@@ -17,6 +17,10 @@ def get_cache() -> SimpleMemoryCache:
 
 def protected_route(req: Request) -> Token:
     auth_header = req.headers.get("Authorization")
+
+    if not auth_header:
+        raise HTTPException(status_code=401, detail="Missing Authentication header")
+
     auth_header = auth_header.split()
 
     if len(auth_header) != 2 or auth_header[0] != "Bearer":

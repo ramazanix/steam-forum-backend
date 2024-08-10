@@ -67,8 +67,7 @@ async def auth_callback(
             "openid.response_nonce": params["openid.response_nonce"],
         },
     ) as response:
-
-        if "is_valid:true" not in response.text:
+        if "is_valid:true" not in await response.text():
             raise HTTPException(
                 status_code=401,
                 detail="Invalid OpenID response",
