@@ -11,6 +11,7 @@ def init_app():
     origins = [
         "https://ramazanix.tech",
         "https://www.ramazanix.tech",
+        '*',
     ]
 
     server.include_router(auth_router)

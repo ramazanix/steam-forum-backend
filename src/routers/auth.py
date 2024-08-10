@@ -79,7 +79,7 @@ async def auth_callback(
         user_info = await get_user_info(user_id, aiohttp_session)
 
     # Генерация JWT токена
-    access_token = create_access_token(user_info)
+    access_token = create_access_token({"sub": user_info})
 
     # Возврат JWT токена в качестве ответа
     response = RedirectResponse(

@@ -1,14 +1,15 @@
-from aiocache import SimpleMemoryCache
+from aiocache import Cache
 
 
 class CacheManager:
     def __init__(self):
-        self.cache_instance = None
+        self._cache_instance = None
 
-    def get_cache(self):
-        if self.cache_instance is None:
-            self.cache_instance = SimpleMemoryCache()
-        return self.cache_instance
+    @property
+    def cache_instance(self):
+        if self._cache_instance is None:
+            self._cache_instance = Cache(Cache.REDIS)
+        return self._cache_instance
 
 
 cache_manager = CacheManager()

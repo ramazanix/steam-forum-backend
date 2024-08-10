@@ -10,6 +10,7 @@ from src.schemas.user import (
 from src.enums import SteamCurrencies, SteamAppIds
 from src.cache import cache_manager
 
+
 async def get_user_info(
     user_id,
     aiohttp_session: ClientSession,
@@ -29,12 +30,13 @@ async def get_item_price(
     currency: SteamCurrencies,
     session: ClientSession,
 ):
-    cache = cache_manager.get_cache()
+    cache = cache_manager.cache_instance
 
-    print(await cache.get(market_hash_name, namespace='price'))
-    if await cache.exists(market_hash_name, 'price'):
-        print('cached')
-        return await cache.get(market_hash_name, namespace='price')
+    if await cache.exists(market_hash_name, namespace="item_price"):
+        print("item was in cache")
+        return InventoryItemPriceInfo(
+            **(await cache.get(market_hash_name, namespace="item_price"))
+        )
 
     async with session.get(
         f"https://steamcommunity.com/market/priceoverview/"
@@ -47,8 +49,8 @@ async def get_item_price(
         item_price_response = await resp.json()
 
     res = InventoryItemPriceInfo(**item_price_response)
-    await cache.set(market_hash_name, res, namespace='price')
-
+    await cache.set(market_hash_name, res.model_dump(), namespace="item_price")
+    print("item cached")
     return res
 
 

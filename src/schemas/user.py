@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-
+from fastapi_camelcase import CamelModel
 
 class InventoryItemFromSteam(BaseModel):
     appid: int
@@ -16,7 +16,7 @@ class ItemDescriptionFromSteam(BaseModel):
     color: str = ""
 
 
-class ItemTagFromSteam(BaseModel):
+class ItemTagFromSteam(CamelModel):
     category: str
     internal_name: str
     localized_category_name: str
@@ -54,12 +54,12 @@ class UserInventoryFromSteam(BaseModel):
     success: int
 
 
-class InventoryItemPriceInfo(BaseModel):
+class InventoryItemPriceInfo(CamelModel):
     lowest_price: str
     median_price: str = ""
 
 
-class UserInventoryItem(BaseModel):
+class UserInventoryItem(CamelModel):
     instanceid: str
     currency: int
     background_color: str
